@@ -1,0 +1,281 @@
+{
+ "title": "CyberNative Breakage Calendar",
+ "page": "https://cybernative.ai/breakage-calendar/",
+ "updated": "2026-11-13",
+ "entries": [
+  {
+   "id": "2027-01-14-openai-removes-gpt-4o-gpt-4-1",
+   "added": "2026-10-20",
+   "short": "OpenAI removes GPT-4o and GPT-4.1 from its API",
+   "date": "2027-01-14",
+   "dateEnd": null,
+   "datePrecision": "day",
+   "time": null,
+   "title": "OpenAI removes GPT-4o, GPT-4o mini, GPT-4.1 and GPT-4.1 mini from its API",
+   "area": "AI APIs",
+   "what": "On 14 October 2026 OpenAI announced that GPT-4o (gpt-4o-2024-08-06, gpt-4o-2024-11-20), GPT-4o mini (gpt-4o-mini-2024-07-18), GPT-4.1 (gpt-4.1-2025-04-14) and GPT-4.1 mini (gpt-4.1-mini-2025-04-14) will be removed from the API on 14 January 2027. The recommended replacement is gpt-6-luna. OpenAI's notice lists dated snapshots and does not say whether the bare names (gpt-4o, gpt-4o-mini, gpt-4.1, gpt-4.1-mini) stop working. Every snapshot those names point to is on the removal list, and the model pages mark them Deprecated. 40 of the 42 listed libraries send only a bare name, so whether they are affected depends on what OpenAI does with those names.",
+   "affected": "Code that calls OpenAI through a library without passing a model. On 18 October we read the latest release of the 252 packages among the 15,000 most-downloaded on PyPI that depend directly on the OpenAI, Anthropic or Google SDKs. At least 42 of them send one of these models by default when you don't pass a model, among them langsmith (evaluator), openai-agents (compaction session only), google-adk, browser-use, llama-index-llms-openai, crewai, haystack-ai and pipecat-ai. Two name a dated snapshot from the notice (inspect-evals, nemo-gym); the other 40 send only the bare names. The full list gives each package's file and line. Callers who pass model= are not affected by that default; Azure deployments follow Azure's own schedule.",
+   "check": "In this order: (1) open your OpenAI usage dashboard grouped by model, which shows the library calls that actually ran; (2) for each of these models you see there, call GET /v1/models/<id> and read shutdown_date; (3) with your project's Python environment active, search its site-packages for these model names with the command below, or pass model= explicitly.",
+   "checkCode": "grep -rnE --include='*.py' \\\n  \"[\\\"'](openai/)?gpt-4(o|\\.1)\\\n(-mini)?(-20[0-9]{2}-[0-9]{2}-[0-9]{2})?\\\n[\\\"']\" \\\n  \"$(python3 -c 'import sysconfig\nprint(sysconfig.get_paths()[\"purelib\"])')\"",
+   "leadDays": 30,
+   "fix": {
+    "kind": "none",
+    "href": "https://developers.openai.com/api/docs/deprecations",
+    "label": "OpenAI deprecations page (entry of 14 October 2026)",
+    "testedAt": null
+   },
+   "sources": [
+    {
+     "label": "OpenAI API deprecations: entry of 14 October 2026 (GPT-4 series, shutdown 14 January 2027)",
+     "href": "https://developers.openai.com/api/docs/deprecations",
+     "checkedAt": "2026-10-18"
+    },
+    {
+     "label": "OpenAI model page: GPT-4o (marked Deprecated)",
+     "href": "https://developers.openai.com/api/docs/models/gpt-4o",
+     "checkedAt": "2026-10-18"
+    }
+   ],
+   "icsDescriptionAddendum": "OpenAI's notice lists dated snapshots and does not say whether the bare names (gpt-4o, gpt-4o-mini, gpt-4.1, gpt-4.1-mini) stop working. Every snapshot those names point to is on the removal list, and the model pages mark them Deprecated. 40 of the 42 listed libraries send only a bare name, so whether they are affected depends on what OpenAI does with those names.",
+   "feedSummaryAddendum": "OpenAI's notice lists dated snapshots and does not say whether the bare names (gpt-4o, gpt-4o-mini, gpt-4.1, gpt-4.1-mini) stop working. Every snapshot those names point to is on the removal list, and the model pages mark them Deprecated. 40 of the 42 listed libraries send only a bare name, so whether they are affected depends on what OpenAI does with those names.",
+   "see": {
+    "lead": "What the 23 October shutdown printed, and a check for your installed packages, are in",
+    "href": "/guides/openai-model-shutdown-gpt-image-1-does-not-exist/",
+    "label": "our OpenAI shutdown guide."
+   }
+  },
+  {
+   "id": "2026-11-30-claude-sonnet-4-5-retired",
+   "added": "2026-10-20",
+   "short": "Claude Sonnet 4.5 retired from the Claude API",
+   "date": "2026-11-30",
+   "dateEnd": null,
+   "datePrecision": "day",
+   "time": null,
+   "title": "Anthropic retires Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) on the Claude API",
+   "area": "AI APIs",
+   "what": "On 30 September 2026 Anthropic announced that claude-sonnet-4-5-20250929 will be retired from the Claude API on 30 November 2026; the recommended replacement is claude-sonnet-5-5. Anthropic's versioning page says the alias claude-sonnet-4-5 resolves to the most recent dated 4.5 snapshot, which is this one; the notice does not state the alias's own retirement date.",
+   "affected": "Code that sends claude-sonnet-4-5-20250929 or the alias claude-sonnet-4-5 to the Claude API, or to Microsoft Foundry, which Anthropic says follows the Claude API lifecycle schedule. Bedrock and Vertex AI follow their own schedules. Update, 8 November: in the latest releases we read on 8 November, six libraries and tools send this model when you don't choose one: LangChain's ChatAnthropic for JavaScript (@langchain/anthropic 1.6.1), Haystack's AnthropicChatGenerator and AnthropicFoundryChatGenerator (anthropic-haystack 8.0.1), LangChain's legacy AnthropicLLM for Python (langchain-anthropic 1.7.10), agno's AzureFoundryClaude for Microsoft Foundry (agno 3.1.12), aider 0.86.2 started without a model while ANTHROPIC_API_KEY is set, and genagent 0.4.1. Two send the dated ID and four send the alias. Choosing the model yourself, for example claude-sonnet-5-5, overrides each default; the library list at the end of this entry gives each one's file, line and setting. We read the code; we did not call the API. Claude Code on Microsoft Foundry sends this model too, according to Anthropic's documentation: there its default model and its sonnet alias resolve to Sonnet 4.5 unless ANTHROPIC_DEFAULT_SONNET_MODEL is set. Set that variable to a deployment of a current Sonnet model. We took this from the documentation and did not run it.",
+   "check": "Search your code, configuration and installed packages for claude-sonnet-4-5, which also matches the dated ID; pass the replacement model explicitly. In installed packages most hits are model lists and deprecation tables, which send nothing. The libraries that send this model when your code names none are in the list at the end of this entry, with the setting that overrides each one.",
+   "checkCode": null,
+   "fix": {
+    "kind": "none",
+    "href": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+    "label": "Claude model deprecations page (entry of 30 September 2026)",
+    "testedAt": null
+   },
+   "sources": [
+    {
+     "label": "Claude model deprecations page (entry of 30 September 2026)",
+     "href": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+     "checkedAt": "2026-11-08"
+    },
+    {
+     "label": "Claude models overview (Microsoft Foundry follows the Claude API lifecycle)",
+     "href": "https://platform.claude.com/docs/en/about-claude/models/overview",
+     "checkedAt": "2026-11-08"
+    },
+    {
+     "label": "Claude Code model configuration (Microsoft Foundry: default model and sonnet alias)",
+     "href": "https://code.claude.com/docs/en/model-config",
+     "checkedAt": "2026-11-08"
+    },
+    {
+     "label": "Claude Code on Microsoft Foundry (pin model versions)",
+     "href": "https://code.claude.com/docs/en/microsoft-foundry",
+     "checkedAt": "2026-11-08"
+    }
+   ],
+   "see": {
+    "href": "/guides/anthropic-temperature-unexpected-keyword-argument/",
+    "label": "Anthropic Python SDK 1.0 and 2.0 errors: temperature TypeError fixes"
+   }
+  },
+  {
+   "id": "2026-12-11-openai-removes-gpt-5-o3-snapshots",
+   "added": "2026-10-20",
+   "short": "OpenAI removes GPT-5 and o3, short names too",
+   "date": "2026-12-11",
+   "dateEnd": null,
+   "datePrecision": "day",
+   "time": null,
+   "title": "OpenAI removes GPT-5, GPT-5 mini, GPT-5 nano, GPT-5 pro, o3 and o3-pro from its API, short names included",
+   "area": "AI APIs",
+   "what": "On 11 June 2026 OpenAI announced that gpt-5-2025-08-07, gpt-5-mini-2025-08-07, gpt-5-nano-2025-08-07, gpt-5-pro-2025-10-06, o3-2025-04-16 and o3-pro-2025-06-10 will be removed from the API on 11 December 2026. The recommended replacements are gpt-5.6-sol, gpt-5.6-terra and gpt-5.6-luna. When we read it on 25 October, OpenAI's table also listed the short names gpt-5, gpt-5-mini, gpt-5-nano, gpt-5-pro, o3 and o3-pro next to these snapshots, the same way it listed gpt-4 and gpt-3.5-turbo before they stopped working on 23 October; on 18 and 23 October it listed only the snapshots. 11 of the 12 listed libraries send one of those short names, so plan for them to stop working on 11 December.",
+   "affected": "Code that calls OpenAI through a library without passing a model. On 18 October we read the latest release of the 252 packages among the 15,000 most-downloaded on PyPI that depend directly on the OpenAI, Anthropic or Google SDKs. 12 of them send one of these models by default when you don't pass a model, among them google-adk (OpenAI Responses integration), haystack-ai (OpenAI chat generators), mem0ai (LLM reranker), opik (evaluation judge models), autoevals (RAGAS scorers) and marker-pdf (OpenAI service). One names a dated snapshot from the notice (shiny, AI test generator with the openai provider); the other 11 send only the bare names. The full list gives each package's file and line. Callers who pass model= are not affected by that default; Azure deployments follow Azure's own schedule.",
+   "check": "In this order: (1) open your OpenAI usage dashboard grouped by model, which shows the library calls that actually ran; (2) for each of these models you see there, call GET /v1/models/<id> and read shutdown_date; (3) with your project's Python environment active, search its site-packages for these model names with the command below, or pass model= explicitly.",
+   "checkCode": "grep -rnE --include='*.py' \\\n  \"[\\\"'](openai/)?\\\n(gpt-5(-mini|-nano|-pro)?|o3(-pro)?)\\\n(-20[0-9]{2}-[0-9]{2}-[0-9]{2})?\\\n[\\\"']\" \\\n  \"$(python3 -c 'import sysconfig\nprint(sysconfig.get_paths()[\"purelib\"])')\"",
+   "fix": {
+    "kind": "none",
+    "href": "https://developers.openai.com/api/docs/deprecations",
+    "label": "OpenAI deprecations page (entry of 11 June 2026)",
+    "testedAt": null
+   },
+   "sources": [
+    {
+     "label": "OpenAI API deprecations: entry of 11 June 2026 (GPT-5 and o3 snapshots, shutdown 11 December 2026)",
+     "href": "https://developers.openai.com/api/docs/deprecations",
+     "checkedAt": "2026-10-25"
+    },
+    {
+     "label": "OpenAI model page: GPT-5 (marked Deprecated, one snapshot)",
+     "href": "https://developers.openai.com/api/docs/models/gpt-5",
+     "checkedAt": "2026-10-18"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-19-postgres-latest-becomes-19",
+   "added": "2026-10-20",
+   "short": "postgres:latest becomes 19",
+   "date": "2026-11-19",
+   "dateEnd": null,
+   "datePrecision": "day",
+   "time": null,
+   "title": "postgres:latest becomes 19: unpinned stacks stop starting",
+   "area": "Databases",
+   "what": "PostgreSQL 19 is planned for 19 November 2026 (release candidate 2 came out on 12 November). When it ships, the official Docker image's postgres, postgres:latest, postgres:alpine, postgres:trixie, postgres:bookworm, postgres:alpine3.24 and postgres:alpine3.23 tags move from 18 to 19. A stack that uses one of those tags and already holds data will not start once it pulls the new image and recreates the database container. In our tests on both release candidates the 19 container exited with code 1 (\"Error: in 18+ … there appears to be PostgreSQL data in /var/lib/postgresql/18/docker\", or \"database files are incompatible with server\" when PGDATA is set).",
+   "affected": "Self-hosted stacks that already hold data and use postgres, postgres:latest, postgres:alpine, postgres:trixie, postgres:bookworm, postgres:alpine3.24 or postgres:alpine3.23 (directly or through a registry mirror) without an @sha256 digest. Of 253 projects on the awesome-selfhosted list whose main compose file uses the official postgres image (278 counting test, dev and CI files), 31 use a tag that will move. We then narrowed this to the files a user is likely to copy, after seeing the scan. 9 of those match the two layouts that failed in our test, so existing installs will stop once they pull and recreate on or after 19 November: cal.diy, Hyperswitch, Payload's with-postgres template, Reactive Resume, Grist's Keycloak example, Retrom, Bracket, BookLogr and PodFetch. 4 of these 9 merged a change that moved the volume mount for PostgreSQL 18 (October 2025 to August 2026) and kept the moving tag. We read each project's compose files at its head on 19 October 2026; we did not read every install or run the projects themselves.",
+   "check": "Run this in the folder with your compose file. A line printed means that service moves to 19 on 19 November; it resolves ${VARIABLES} first and also catches mirrors such as public.ecr.aws/docker/library/postgres. For a service with build: instead of image:, read its Dockerfile FROM line: FROM postgres with no number, or with one of the tags above, moves too.",
+   "checkCode": "docker compose config --images |\n  grep -E '(^|/)postgres(:(latest|trixie|bookworm|alpine|alpine3\\.2[34]))?$'",
+   "fix": {
+    "kind": "tested",
+    "text": "Pin the major your database runs today: postgres:18 if it runs 18 (or 18-alpine, 18-trixie, 18-bookworm). We tested this with two 1,000-row 18 databases, one in the default layout and one with PGDATA set, on 18.6 and 19 RC 1 (30 October) and on 18.7 and 19 RC 2 (13 November): 19 refused both each time, and both opened again on postgres:18 with all 1,000 rows. Upgrade to 19 later with pg_upgrade or a dump and restore. Do not run docker compose down -v as a fix: it can delete the database volume.",
+    "code": "image: postgres:18",
+    "testedAt": "2026-11-13"
+   },
+   "sources": [
+    {
+     "label": "PostgreSQL: PostgreSQL 18.7, 17.12, 16.16, 15.20, 14.25, and 19 RC 2 released (12 November 2026), with the planned general availability date",
+     "href": "https://www.postgresql.org/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/",
+     "checkedAt": "2026-11-13"
+    },
+    {
+     "label": "Docker Hub: postgres official image, supported tags and the PGDATA change in 18 and above",
+     "href": "https://hub.docker.com/_/postgres",
+     "checkedAt": "2026-10-19"
+    }
+   ],
+   "see": {
+    "lead": "The exact errors, what Compose shows, and two upgrades to 19 that ran are in",
+    "href": "/guides/postgres-latest-19-docker-error-in-18-upgrade/",
+    "label": "our PostgreSQL 19 Docker guide."
+   }
+  },
+  {
+   "id": "2026-10-28-node-lts-becomes-node-26",
+   "added": "2026-10-24",
+   "short": "node:lts becomes Node 26: no Yarn, no Corepack",
+   "date": "2026-10-28",
+   "dateEnd": null,
+   "datePrecision": "day",
+   "time": "tag move expected that day or shortly after; not announced",
+   "title": "node:lts becomes Node 26: yarn and corepack are no longer in the image",
+   "area": "Node.js",
+   "what": "Node.js 26 becomes the long-term support (LTS) release on 28 October 2026. The official Docker image's lts tags are expected to move from Node 24 to Node 26 that day or shortly after: they moved to Node 24 on the same day last year, and our run of the image's own tag generator, dated 28 October, moved node:lts, node:lts-slim and node:lts-alpine. The maintainers have not announced a time. Node 26 images include neither Yarn v1 nor Corepack, so a build that runs yarn or corepack without installing it first will fail. The node:lts and node:lts-slim tags also move from Debian 12 (bookworm) to Debian 13 (trixie), whose apt has no apt-key command. Executed by us; not independently reproduced.",
+   "affected": "The missing commands come from the image maintainers' notes and the Node.js 25.0.0 changelog, and we checked them on a Node 26.11.1 slim image: it has no yarn, corepack or apt-key. Affected are Dockerfile stages, Compose services and CI jobs whose image is a node:lts tag without an @sha256 digest. Our run of the tag generator moves every one of these tags to Node 26, including node:lts-alpine and node:lts-bookworm (only the name tag node:lts-krypton stays on Node 24), so a stage or job that runs yarn or corepack without first getting it breaks. Only node:lts and node:lts-slim also move to Debian 13, so apt-key breaks on those two tags only. A yarn, corepack or apt-key command in a RUN step fails at the first build after the tag moves, not on the day itself; a cached base image can delay that. A yarn command that appears only in CMD or ENTRYPOINT does not stop the build: the new container fails when it starts. Tags that name a major version, such as node:24-slim, do not move. We searched GitHub code for Dockerfiles containing FROM node:lts and read a 5% sample, spread evenly across file sizes, on default branches. In that sample, 44 repositories that were not forks or archived and had been pushed to since 25 April 2026 have a stage like this: 29 run corepack, 17 run yarn during the build, 5 start the app with yarn and 2 use apt-key (some do more than one). Scaled up from the 5% sample, that is about 880 repositories. We read all 44: three are doubtful (a blog snippet, a backup file and a build that runs yarn only if npm fails), but the rule we fixed before the run counts them. Separately, among .gitlab-ci.yml files on GitHub that use a node:lts image, 23 such repositories have a yarn line and no yarn install anywhere in the file. The search misses FROM lines with --platform or a registry name, and reading a file cannot tell whether it is still built. Executed by us; not independently reproduced.",
+   "check": "Run this from your repository root. This text search lists lines that name a node:lts image, and lines that name yarn, corepack or apt-key, in Dockerfiles and YAML files outside node_modules. For each build stage or CI job whose image is a node:lts tag without an @sha256 digest, look at its yarn and corepack lines: on Node 26 each one fails unless the stage gets the tool first, for example with npm install --global, a system package or a COPY from another image. apt-key fails only on node:lts and node:lts-slim. A yarn command only in CMD or ENTRYPOINT fails when the container starts, not during the build. The search also lists lines that are fine, such as copies of yarn.lock. It misses images named through a variable, such as node:${NODE_TAG}; read your ARG lines too. On the Dockerfiles in our sample, it listed every file we counted.",
+   "checkCode": "grep -rnIE --exclude-dir=node_modules \\\n  --include='*ockerfile*' \\\n  --include='*.yml' --include='*.yaml' \\\n  -e 'node:lts' \\\n  -e '\\b(yarn|corepack|apt-key)\\b' .",
+   "fix": {
+    "kind": "guide",
+    "text": "Pin the Node major you build on today. node:24, node:24-slim and node:24-alpine stay on Node 24, which Node.js supports until 30 April 2028, and node:24 and node:24-slim stay on Debian 12. We ran Node 24.22 images (Debian 12 and Alpine) with no network: yarn 1.22.22 and corepack 0.36.0 were there, and yarn install worked offline on an empty project. When you move to Node 26, add Yarn or Corepack yourself, following the image maintainers' notes and Corepack's own instructions, and replace apt-key as your third-party repository describes for Debian 13. Install lines for Yarn, Corepack and pnpm that passed install-and-version checks on Node 24 and 26 images are in the guide below.",
+    "code": "# Before\nFROM node:lts-slim\n# After: stay on Node 24\nFROM node:24-slim",
+    "href": "/guides/corepack-yarn-pnpm-not-found-node-26-docker/",
+    "label": "Install lines for Yarn, Corepack and pnpm, checked on Node 24 and 26"
+   },
+   "sources": [
+    {
+     "label": "Node.js release schedule: Node.js 26 becomes LTS on 28 October 2026; Node.js 24 is supported until 30 April 2028",
+     "href": "https://github.com/nodejs/Release/blob/main/schedule.json",
+     "checkedAt": "2026-10-22"
+    },
+    {
+     "label": "Node.js Docker image README: Yarn v1 is not bundled into node images as of Node.js 26.0.0",
+     "href": "https://github.com/nodejs/docker-node#yarn-v1-classic-bundling",
+     "checkedAt": "2026-10-22"
+    },
+    {
+     "label": "Node.js 25.0.0 changelog: stop distributing Corepack (pull request 57617)",
+     "href": "https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V25.md#25.0.0",
+     "checkedAt": "2026-10-22"
+    },
+    {
+     "label": "Corepack README: how to install Corepack",
+     "href": "https://github.com/nodejs/corepack#readme",
+     "checkedAt": "2026-10-22"
+    },
+    {
+     "label": "docker-library/official-images commit 94de89d: Node.js 24 Krypton LTS (the lts tags moved to Node 24 on 28 October 2025)",
+     "href": "https://github.com/docker-library/official-images/commit/94de89d2cb110d1d0e5742c25a189dd6f6523ef2",
+     "checkedAt": "2026-10-22"
+    },
+    {
+     "label": "Node.js Docker image tag generator (stackbrew.js) as of 21 October 2026",
+     "href": "https://github.com/nodejs/docker-node/blob/84410eeaede25daf49826da8265fbf548cc604fe/stackbrew.js",
+     "checkedAt": "2026-10-22"
+    },
+    {
+     "label": "Debian 13 (trixie) apt package file list: no apt-key",
+     "href": "https://packages.debian.org/trixie/amd64/apt/filelist",
+     "checkedAt": "2026-10-22"
+    }
+   ]
+  },
+  {
+   "id": "2027-04-30-node-22-end-of-life",
+   "added": "2026-11-05",
+   "short": "Node 22 reaches end of life",
+   "date": "2027-04-30",
+   "dateEnd": null,
+   "datePrecision": "day",
+   "time": null,
+   "title": "Node 22 reaches end of life, and the node:22 images stop getting updates",
+   "area": "Node.js",
+   "leadDays": 30,
+   "what": "Node.js 22 (Jod) reaches end of life on 30 April 2027. Node.js says a release line at end of life no longer receives updates, security patches included. The official Docker image drops a release line from its build list at about that time: Node 20, which reached end of life on 30 April 2026, was dropped on 1 May 2026, and Node 18, end of life 30 April 2025, on 28 May 2025. The tags are not deleted: on 4 November 2026 Docker Hub still served node:20 and node:18, last updated on 22 April 2026 and 23 May 2025. So node:22 keeps pulling after it is dropped, but it is no longer rebuilt: no Node.js fixes and no Debian or Alpine package updates.",
+   "affected": "Dockerfile stages, Compose services and CI jobs on a node:22 tag (node:22, node:22-slim, node:22-alpine, node:22-bookworm and the like, or the codename tags node:jod and node:lts-jod), and CI setup steps, .nvmrc, .node-version and .tool-versions files that install Node 22, including by its name lts/jod. Nothing fails on 30 April itself: builds keep working, but security fixes released for newer Node.js lines after that date do not come to Node 22. node:22 and node:22-slim are Debian 12 (bookworm).",
+   "check": "Run this from your repository root. It lists lines that pick Node 22 in Dockerfiles, Containerfiles, YAML files, .nvmrc, .node-version and .tool-versions outside node_modules: node:22 and node:jod images, lts/jod, node-version: lines that name 22, and version files that start with 22. A version range in package.json, such as >=22, is not listed and does not need to change. It can print a range in a node-version: line, such as '>=22', which runs the newest matching Node.js already on the runner, or downloads the newest release if none matches; check those. It misses versions set through a variable; read your ARG and env lines too. On our test files, run with GNU grep 3.12 in bash and dash, it printed every line it should, and its only extra line was such a range.",
+   "checkCode": "grep -rniIE --exclude-dir=node_modules \\\n  --include='*ockerfile*' --include='*ontainerfile*' \\\n  --include='*.yml' --include='*.yaml' \\\n  --include='.nvmrc' --include='.node-version' \\\n  --include='.tool-versions' \\\n  -e 'node:(22|jod|lts-jod)\\b' -e 'lts/jod' \\\n  -e 'node-version:(.*[^.0-9])?22([^0-9]|$)' \\\n  -e '^(v|nodejs |node )?22(\\.|[[:space:]]|$)' .",
+   "fix": {
+    "kind": "guide",
+    "text": "Move to Node 24, supported until 30 April 2028, or Node 26, supported until 30 April 2029, and run your own tests on it; we did not test whether a given project works there. node:24 and node:24-slim stay on Debian 12 and still include Yarn v1 and Corepack. node:26 images include neither, and node:26 and node:26-slim are Debian 13 (trixie), whose apt has no apt-key. Install lines for Yarn, Corepack and pnpm are in the guide below.",
+    "code": "# Before\nFROM node:22-slim\n# After\nFROM node:24-slim",
+    "href": "/guides/corepack-yarn-pnpm-not-found-node-26-docker/",
+    "label": "Install lines for Yarn, Corepack and pnpm, checked on Node 24 and 26"
+   },
+   "sources": [
+    {
+     "label": "Node.js release schedule: Node.js 22 end of life 30 April 2027; Node.js 24 until 30 April 2028; Node.js 26 until 30 April 2029",
+     "href": "https://github.com/nodejs/Release/blob/main/schedule.json",
+     "checkedAt": "2026-11-04"
+    },
+    {
+     "label": "Node.js: End-Of-Life (\"it will no longer receive updates, including security patches\")",
+     "href": "https://nodejs.org/en/about/eol",
+     "checkedAt": "2026-11-04"
+    },
+    {
+     "label": "docker-library/official-images commit: Drop Node.js v20 (1 May 2026)",
+     "href": "https://github.com/docker-library/official-images/commit/72eb59dfa93105cf03394c7c6f7517ecc8b0b520",
+     "checkedAt": "2026-11-04"
+    },
+    {
+     "label": "docker-library/official-images commit: Drop EOL Node.js 18 (28 May 2025)",
+     "href": "https://github.com/docker-library/official-images/commit/7a83369b17bd6ded3a2081efafc3a225b9822f23",
+     "checkedAt": "2026-11-04"
+    },
+    {
+     "label": "Docker Hub: node:20 tag record (last updated 22 April 2026)",
+     "href": "https://hub.docker.com/v2/repositories/library/node/tags/20",
+     "checkedAt": "2026-11-04"
+    },
+    {
+     "label": "docker-library/official-images: the published node tag list (node:22 tags)",
+     "href": "https://github.com/docker-library/official-images/blob/master/library/node",
+     "checkedAt": "2026-11-04"
+    }
+   ]
+  }
+ ],
+ "_note": "Six real rows from https://cybernative.ai/breakage-calendar/entries.json as read on 2026-11-13, the per-package lists removed. For tests only."
+}

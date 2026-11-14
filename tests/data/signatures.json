@@ -1,0 +1,70 @@
+{
+ "about": "One signature per calendar date a repository's files can show; every other date is listed under blind with the reason a folder cannot show it. Each pattern is the row's own published search (entries.json checkCode or check text), applied line by line in the browser. files: 'any' = every text file (the row's command searches the whole tree), 'source' = code and config but not prose (the AI-model rows spell this out as a path pattern that also leaves out test and fixture paths, and their patterns skip lines that start as a comment), 'workflow' = .github/workflows, otherwise a path regex. listed: the item in the page's \"What the page looks for\" list that names these files. kind: 'match' = the row's search found the line; 'possible' = the files use what the date affects, and only some setups break.",
+ "workflow": "^\\.github/workflows/[^/]+\\.ya?ml$",
+ "blind": {
+  "2026-11-01-us-clocks-go-back-kubernetes-cronjob": "the row's check lists each CronJob's time zone and schedule on the running cluster with kubectl, not in the repository's files",
+  "2026-11-01-us-clocks-go-back-spring-scheduled": "the JVM's time zone is set where the application runs (a start flag, TZ or the host), not in the repository's files",
+  "2026-11-01-us-clocks-go-back-camunda-timers": "the JVM's time zone is set where the engine runs (a start flag, TZ or the host), and the timers live in the engine's database, not in the repository's files"
+ },
+ "signatures": [
+  {
+   "row": "2027-01-14-openai-removes-gpt-4o-gpt-4-1",
+   "kind": "match",
+   "listed": "models",
+   "files": "^(?!(.*/)?(tests?|__tests__|specs?|testdata|test[-_]data|testutils?|fixtures?|__fixtures__|__mocks__|mocks?|e2e)/)(?!(.*/)?(test_[^/]*\\.py|conftest\\.py|[^/]*[._-](tests?|specs?)\\.(py|js|mjs|cjs|jsx|ts|tsx|go|rb|php|java|kt|cs|rs|swift|exs?)|[^/]*Tests?\\.(java|kt|kts|cs|swift|scala))$)(?!(.*/)?model_prices_and_context_window[^/]*\\.json$)(.*\\.(py|pyi|ipynb|js|mjs|cjs|jsx|ts|tsx|go|rb|php|java|kt|kts|scala|cs|rs|swift|ex|exs|sh|bash|zsh|ps1|ya?ml|toml|json|ini|cfg|conf|env|properties|tf|r|R)$|(.*/)?(Dockerfile[^/]*|Makefile|\\.env[^/]*)$)",
+   "patterns": [
+    "^(?!\\s*(#|//|/\\*|\\*|--))(?=.*[\"'](openai/)?gpt-4(o|\\.1)(-mini)?(-20[0-9]{2}-[0-9]{2}-[0-9]{2})?[\"'])"
+   ]
+  },
+  {
+   "row": "2026-12-11-openai-removes-gpt-5-o3-snapshots",
+   "kind": "match",
+   "listed": "models",
+   "files": "^(?!(.*/)?(tests?|__tests__|specs?|testdata|test[-_]data|testutils?|fixtures?|__fixtures__|__mocks__|mocks?|e2e)/)(?!(.*/)?(test_[^/]*\\.py|conftest\\.py|[^/]*[._-](tests?|specs?)\\.(py|js|mjs|cjs|jsx|ts|tsx|go|rb|php|java|kt|cs|rs|swift|exs?)|[^/]*Tests?\\.(java|kt|kts|cs|swift|scala))$)(?!(.*/)?model_prices_and_context_window[^/]*\\.json$)(.*\\.(py|pyi|ipynb|js|mjs|cjs|jsx|ts|tsx|go|rb|php|java|kt|kts|scala|cs|rs|swift|ex|exs|sh|bash|zsh|ps1|ya?ml|toml|json|ini|cfg|conf|env|properties|tf|r|R)$|(.*/)?(Dockerfile[^/]*|Makefile|\\.env[^/]*)$)",
+   "patterns": [
+    "^(?!\\s*(#|//|/\\*|\\*|--))(?=.*[\"'](openai/)?gpt-5(-mini|-nano|-pro)?(-20[0-9]{2}-[0-9]{2}-[0-9]{2})?[\"'])",
+    "^(?!\\s*(#|//|/\\*|\\*|--))(?=.*([Mm][Oo][Dd][Ee][Ll]|[Cc][Oo][Dd][Ee][Xx]|[Oo][Pp][Ee][Nn][Aa][Ii]|gpt-|[\"']o[14]|:\"o3|[\"']o3(-pro)?[\"']\\s*:)).*[\"'](openai/)?o3(-pro)?(-20[0-9]{2}-[0-9]{2}-[0-9]{2})?[\"']"
+   ]
+  },
+  {
+   "row": "2026-11-30-claude-sonnet-4-5-retired",
+   "kind": "match",
+   "listed": "models",
+   "files": "^(?!(.*/)?(tests?|__tests__|specs?|testdata|test[-_]data|testutils?|fixtures?|__fixtures__|__mocks__|mocks?|e2e)/)(?!(.*/)?(test_[^/]*\\.py|conftest\\.py|[^/]*[._-](tests?|specs?)\\.(py|js|mjs|cjs|jsx|ts|tsx|go|rb|php|java|kt|cs|rs|swift|exs?)|[^/]*Tests?\\.(java|kt|kts|cs|swift|scala))$)(?!(.*/)?model_prices_and_context_window[^/]*\\.json$)(.*\\.(py|pyi|ipynb|js|mjs|cjs|jsx|ts|tsx|go|rb|php|java|kt|kts|scala|cs|rs|swift|ex|exs|sh|bash|zsh|ps1|ya?ml|toml|json|ini|cfg|conf|env|properties|tf|r|R)$|(.*/)?(Dockerfile[^/]*|Makefile|\\.env[^/]*)$)",
+   "patterns": [
+    "^(?!\\s*(#|//|/\\*|\\*|--))(?=.*claude-sonnet-4-5)"
+   ]
+  },
+  {
+   "row": "2026-11-19-postgres-latest-becomes-19",
+   "kind": "postgres",
+   "listed": "postgres",
+   "files": "(^|/)([^/]*compose[^/]*\\.ya?ml|Dockerfile[^/]*)$",
+   "patterns": [
+    "(image:|FROM)\\s*[\"']?(docker\\.io/)?(library/)?postgres(:[A-Za-z0-9._-]+)?(@sha256:[0-9a-f]+)?"
+   ]
+  },
+  {
+   "row": "2026-10-28-node-lts-becomes-node-26",
+   "kind": "possible",
+   "listed": "postgres",
+   "files": "(^|/)([^/]*ockerfile[^/]*|[^/]*\\.ya?ml)$",
+   "patterns": [
+    "node:lts(?!-krypton)(-[A-Za-z0-9._-]+)?(?![A-Za-z0-9._@-])"
+   ],
+   "needs": "\\b(yarn|corepack|apt-key)\\b(?!\\.lock)"
+  },
+  {
+   "row": "2027-04-30-node-22-end-of-life",
+   "kind": "possible",
+   "listed": "postgres",
+   "files": "(^|/)([^/]*ockerfile[^/]*|[^/]*ontainerfile[^/]*|[^/]*\\.ya?ml|\\.nvmrc|\\.node-version|\\.tool-versions)$",
+   "patterns": [
+    "[Nn][Oo][Dd][Ee]:(?:22|[Jj][Oo][Dd]|[Ll][Tt][Ss]-[Jj][Oo][Dd])\\b",
+    "[Ll][Tt][Ss]/[Jj][Oo][Dd]",
+    "[Nn][Oo][Dd][Ee]-[Vv][Ee][Rr][Ss][Ii][Oo][Nn]:(?:.*[^.0-9])?22(?:[^0-9]|$)",
+    "^(?:[Vv]|[Nn][Oo][Dd][Ee][Jj][Ss] |[Nn][Oo][Dd][Ee] )?22(?:\\.|\\s|$)"
+   ]
+  }
+ ]
+}
