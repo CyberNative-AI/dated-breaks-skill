@@ -17,7 +17,7 @@ $ python3 scripts/dated_breaks.py tests/fixtures/dirty      # excerpt of the rea
     replace:  Move to Node 24, supported until 30 April 2028, or Node 26, ...
 ```
 
-How often do coding models pick routes with a published break date? See the [dated-break eval](https://huggingface.co/datasets/CyberNative-AI/dated-break-eval): 64 coding requests, three models so far.
+How often do coding models pick routes with a published break date? See the [dated-break eval](https://huggingface.co/datasets/CyberNative-AI/dated-break-eval): 64 coding requests, four models.
 
 ## The two dates to know first
 
